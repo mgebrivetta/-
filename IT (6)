@@ -1,0 +1,105 @@
+1) 
+library IEEE;
+use ieee.std_logic_1164.all;
+ 
+entity first is
+port
+    (
+        a:in std_logic_vector(1 downto 0);
+        b:in std_logic_vector(1 downto 0);
+        c:in std_logic_vector(1 downto 0);
+    );
+end first;
+ 
+architecture comparator of first is
+    signal max:std_logic_vector(1 downto 0);
+    signal min:std_logic_vector(1 downto 0);
+    signal result:std_logic_vector(1 downto 0);
+    begin
+    
+//Задача 1
+/* Иcпользуя операторы if…then и
+case…when на языке VHDL создать
+модуль, в котором сравниваются три
+входных сигнала. На выход, в зависимости
+от сигнала SEL выводится либо
+максимальное из чисел, либо минимальное
+из чисел, либо медиана трех чисел.
+*/
+
+    process (a, b, c)
+        variable x: real := 0.1;
+        variable y: real;
+        
+        begin
+            if (a > b) then
+                max <= a;
+            else max <= b;
+            end if;
+            
+            if c > max then
+                max <= c;
+            end if;
+            
+            
+            if a < b then
+                min <= a;
+            else min <= b;
+            end if;
+            
+            if c < min then
+                min <= c;
+            end if; 
+            
+            case SET is 
+                when "01" =>
+                    result <= max;
+                when "10" =>
+                    result <= min;
+                when "11" =>
+                    if min < a and a < max then
+                        result <= a;
+                    end if;
+                    if min < b and b < max then
+                        result <= b;
+                    end if;
+                    if min < c and c < max then
+                        result <= c;
+                    end if;
+                when others => result <= "00";
+            end case;
+            
+// Задача 2
+/*Обычно при цифровой реализации синусоидального
+колебания используется следующий ряд:
+ Непосредственно вычисления по формуле выполняются
+для первого квадранта, соответствующего значениям
+ так как только в этом квадранте наблюдается хорошее
+совпадение синусоидальной функции с указанным
+степенным рядом. Для вычисления в других квадрантах
+используются соотношения
+*/
+        loop
+            if x > 2 then
+                x := x - 2;
+            else ext;
+            end if;
+        end loop;
+        
+        if (x > 0) and (x <= 0.5) then
+            y := 3.140625 * x + 0.02026367 * x ** 2 - 5.325196 * x ** 3 + 0.5446778 * x ** 4 + 1.800293 * x ** 5;
+        elsif (x > 0.5) and (x <= 1) then
+            x := 1 - x;
+            y := 3.140625 * x + 0.02026367 * x ** 2 - 5.325196 * x ** 3 + 0.5446778 * x ** 4 + 1.800293 * x ** 5;
+        elsif (x > 1) and (x <= 1.5) then
+            x := x - 1;
+            y := 3.140625 * x + 0.02026367 * x ** 2 - 5.325196 * x ** 3 + 0.5446778 * x ** 4 + 1.800293 * x ** 5;
+            y := -y;
+        elsif (x > 1.5) and (x < 2) then
+            x := 2 - x;
+            y := 3.140625 * x + 0.02026367 * x ** 2 - 5.325196 * x ** 3 + 0.5446778 * x ** 4 + 1.800293 * x ** 5;
+            y := -y;
+        end if;
+        
+    end process;
+end comparator;
